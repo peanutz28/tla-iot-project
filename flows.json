@@ -1,0 +1,625 @@
+[
+    {
+        "id": "af481ff545c9f149",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "349eb5c0d5910e09",
+        "type": "serial in",
+        "z": "af481ff545c9f149",
+        "name": "",
+        "serial": "a3bbd1faf65cb30a",
+        "x": 220,
+        "y": 60,
+        "wires": [
+            [
+                "d1c7a56ff6098fa6",
+                "bb8058045ef79c22"
+            ]
+        ]
+    },
+    {
+        "id": "d1c7a56ff6098fa6",
+        "type": "function",
+        "z": "af481ff545c9f149",
+        "name": "function 1",
+        "func": "/*\nvar output = msg.payload.split(\" \");\nvar time = {payload:parseInt(output[0])};\nvar temp = {payload:parseInt(output[1])};\n\nreturn[time, temp]\n*/\n\n\nvar output = msg.payload.trim().split(\" \");    // [.trim()] to trim off the crlf first and [.split(\" \")] to split into parts  \n\n\nvar time = { payload: parseFloat(output[0]) };\nvar temp = { payload: parseFloat(output[2]) };\nvar humidity = { payload: parseFloat(output[3]) };\nvar pressure = { payload: parseFloat(output[6]) };\nvar gas = output[9].split(\"-\");\nvar alt = { payload: parseFloat(gas[0]) };\nvar air = { payload: parseFloat(gas[1]) };\n\n\nconsole.log(output);\n\n\n//msg.payload = output[1];  // replace payload with the reading we want\n//msg.topic = output[0];      // set the topic in case we need to tell them apart later\nreturn [time, temp, humidity, pressure, alt, air];\n//return [12.30, 73, 102, 55.55, 110, 25];",
+        "outputs": 6,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 220,
+        "wires": [
+            [
+                "25f43c1bca69fe80"
+            ],
+            [
+                "f7b719cda01684ac"
+            ],
+            [
+                "6b14099445d205db",
+                "81d7343f75490b64",
+                "2d9994ef5b708256"
+            ],
+            [
+                "b50fa54ff4fac292",
+                "a0162b5326257614",
+                "4ebea1c2b93c2cca"
+            ],
+            [
+                "55cf098805fc2481",
+                "e940267700d51c3b"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "25f43c1bca69fe80",
+        "type": "ui_text",
+        "z": "af481ff545c9f149",
+        "group": "64b07586.8c0c44",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "Time: ",
+        "label": "Time:",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 670,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "d8e160a3f97c6aae",
+        "type": "ui_text",
+        "z": "af481ff545c9f149",
+        "group": "64b07586.8c0c44",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "Temperature:",
+        "label": "Temperature:",
+        "format": "{{msg.payload}} ºF",
+        "layout": "row-spread",
+        "className": "",
+        "x": 810,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "6b14099445d205db",
+        "type": "ui_text",
+        "z": "af481ff545c9f149",
+        "group": "64b07586.8c0c44",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Humidity:",
+        "label": "Humidity:",
+        "format": "{{msg.payload}} %",
+        "layout": "row-spread",
+        "className": "",
+        "x": 680,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "b50fa54ff4fac292",
+        "type": "ui_text",
+        "z": "af481ff545c9f149",
+        "group": "64b07586.8c0c44",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Air Pressure",
+        "format": "{{msg.payload}} hPa",
+        "layout": "row-spread",
+        "className": "",
+        "x": 690,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "55cf098805fc2481",
+        "type": "ui_text",
+        "z": "af481ff545c9f149",
+        "group": "64b07586.8c0c44",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "Alt:",
+        "label": "Alt:",
+        "format": "{{msg.payload}} m",
+        "layout": "row-spread",
+        "className": "",
+        "x": 670,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "97bd30691b2a5b78",
+        "type": "ui_chart",
+        "z": "af481ff545c9f149",
+        "name": "",
+        "group": "0f9f11d5f3a358bf",
+        "order": 1,
+        "width": 10,
+        "height": 6,
+        "label": "Temperature (ºF)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Temperature Data Loading...",
+        "dot": false,
+        "ymin": "-10",
+        "ymax": "110",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 480,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb8058045ef79c22",
+        "type": "file",
+        "z": "af481ff545c9f149",
+        "name": "Serial Data from Node Red",
+        "filename": "/Users/kamalsaheta/Desktop/BME688_Data/Node_Red_Serial_Data/NodeRedData.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 660,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "81d7343f75490b64",
+        "type": "ui_chart",
+        "z": "af481ff545c9f149",
+        "name": "",
+        "group": "0f9f11d5f3a358bf",
+        "order": 2,
+        "width": 10,
+        "height": 6,
+        "label": "Humidity (%)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Humidity Data Loading...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 470,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a0162b5326257614",
+        "type": "ui_chart",
+        "z": "af481ff545c9f149",
+        "name": "",
+        "group": "0f9f11d5f3a358bf",
+        "order": 4,
+        "width": 10,
+        "height": 6,
+        "label": "Air Pressure (hPa)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Air Pressure Data Loading...",
+        "dot": false,
+        "ymin": "900",
+        "ymax": "1200",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 490,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e940267700d51c3b",
+        "type": "ui_chart",
+        "z": "af481ff545c9f149",
+        "name": "",
+        "group": "0f9f11d5f3a358bf",
+        "order": 5,
+        "width": 10,
+        "height": 6,
+        "label": "Altitude (meters)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "Altitude Data Loading...",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "500",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 480,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "df563b5c6c8a2bc5",
+        "type": "ui_toast",
+        "z": "af481ff545c9f149",
+        "position": "top right",
+        "displayTime": "30",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "Temperature",
+        "x": 570,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "c061263f5fe20eb9",
+        "type": "function",
+        "z": "af481ff545c9f149",
+        "name": "Temperature Checker",
+        "func": "var toohot = \"It is too hot, decrease the temperature. Check dashboard for precise values. \"\nvar toocold = \"It is too cold, increase the temperature. Check dashboard for precise values. \"\n\nif (msg.payload < 60) { \n    msg.payload = toocold\n    return msg;\n} else if (msg.payload > 82) {\n    msg.payload = toohot;\n    return msg;\n} else {\n    return null;\n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 620,
+        "wires": [
+            [
+                "df563b5c6c8a2bc5",
+                "1fe6aff6d9617c06"
+            ]
+        ]
+    },
+    {
+        "id": "d83dea3f7c7a0f9a",
+        "type": "ui_toast",
+        "z": "af481ff545c9f149",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "Humidity",
+        "x": 560,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "2d9994ef5b708256",
+        "type": "function",
+        "z": "af481ff545c9f149",
+        "name": "Humidity Checker",
+        "func": "var toohumid = \"It is too humid. Turn on an air conditioner and check dashboard for precise values. \"\nvar toodry = \"It is too dry. Turn on a humidifier and check dashboard for precise values. \"\n\nif (msg.payload < 30) { \n    msg.payload = toodry\n    return msg;\n} else if (msg.payload > 60) {\n    msg.payload = toohumid;\n    return msg;\n} else {\n    return null;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 660,
+        "wires": [
+            [
+                "d83dea3f7c7a0f9a",
+                "d088d0666d56420b"
+            ]
+        ]
+    },
+    {
+        "id": "1af5f997079bea73",
+        "type": "ui_toast",
+        "z": "af481ff545c9f149",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "Temperature",
+        "x": 570,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "4ebea1c2b93c2cca",
+        "type": "function",
+        "z": "af481ff545c9f149",
+        "name": "Air Pressure Checker",
+        "func": "var highpress = \"Air pressure is high. Check for ventilation problems. \"\nvar lowpress = \"Air pressure is low. Check for ventilation problems. \"\n\nif (msg.payload < 970) { \n    msg.payload = lowpress\n    return msg;\n} else if (msg.payload > 1030) {\n    msg.payload = highpress;\n    return msg;\n} else {\n    return null;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 700,
+        "wires": [
+            [
+                "1af5f997079bea73",
+                "e76c8c4e6436e51c"
+            ]
+        ]
+    },
+    {
+        "id": "1fe6aff6d9617c06",
+        "type": "ui_audio",
+        "z": "af481ff545c9f149",
+        "name": "Temperature",
+        "group": "d2de346b80b2e397",
+        "voice": "Alex",
+        "always": true,
+        "x": 790,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "37ad5ea539c26c6d",
+        "type": "inject",
+        "z": "af481ff545c9f149",
+        "name": "timestamp",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 450,
+        "y": 40,
+        "wires": [
+            [
+                "bb8058045ef79c22"
+            ]
+        ]
+    },
+    {
+        "id": "f7b719cda01684ac",
+        "type": "function",
+        "z": "af481ff545c9f149",
+        "name": "Celsius to Fahrenheit",
+        "func": "var temp = msg.payload;\n\nvar fah = temp * 9 / 5 + 32;\n//var str = fah.toString();\nvar str = { payload: (temp * 9 / 5 + 32) };\n\nreturn str;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 180,
+        "wires": [
+            [
+                "d8e160a3f97c6aae",
+                "c061263f5fe20eb9",
+                "97bd30691b2a5b78"
+            ]
+        ]
+    },
+    {
+        "id": "d088d0666d56420b",
+        "type": "ui_audio",
+        "z": "af481ff545c9f149",
+        "name": "Humidity",
+        "group": "d2de346b80b2e397",
+        "voice": "Alex",
+        "always": true,
+        "x": 780,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "e76c8c4e6436e51c",
+        "type": "ui_audio",
+        "z": "af481ff545c9f149",
+        "name": "Air Pressure",
+        "group": "d2de346b80b2e397",
+        "voice": "Alex",
+        "always": true,
+        "x": 790,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "4bd8c8710170ef40",
+        "type": "ui_spacer",
+        "z": "af481ff545c9f149",
+        "name": "spacer",
+        "group": "0f9f11d5f3a358bf",
+        "order": 3,
+        "width": 20,
+        "height": 1
+    },
+    {
+        "id": "a3bbd1faf65cb30a",
+        "type": "serial-port",
+        "serialport": "/dev/cu.usbserial-D30DPYCQ",
+        "serialbaud": "115200",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "1000",
+        "bin": "false",
+        "out": "interbyte",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "64b07586.8c0c44",
+        "type": "ui_group",
+        "name": "Standard",
+        "tab": "d338eebb.4a506",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "0f9f11d5f3a358bf",
+        "type": "ui_group",
+        "name": "Graphed Data",
+        "tab": "e7a9acbcdbfa495f",
+        "order": 1,
+        "disp": true,
+        "width": 20,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d2de346b80b2e397",
+        "type": "ui_group",
+        "name": "Audio Notifications",
+        "tab": "3a734fc3c707c866",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d338eebb.4a506",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "e7a9acbcdbfa495f",
+        "type": "ui_tab",
+        "name": "Graph",
+        "icon": "Temperature (ºC)",
+        "order": 2,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "3a734fc3c707c866",
+        "type": "ui_tab",
+        "name": "Audio Out",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
